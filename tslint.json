@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "anux-package/linters/ts.json"
+  ]
+}
