@@ -9,6 +9,7 @@ export function route(httpMethod: HttpMethods, url: string, options?: IRouteOpti
       return this[propertyKey].apply(this, args);
     };
     handler.setName(propertyKey.toString());
+    options = options || {};
     routes.push({
       method: httpMethod,
       url,
