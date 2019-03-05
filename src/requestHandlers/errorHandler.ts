@@ -1,5 +1,5 @@
 import { BaseError } from 'anux-common';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 interface IConfig {
   outputStackTrace?: boolean;
@@ -18,10 +18,10 @@ export function errorHandler(config: IConfig) {
     outputStackTrace: false,
     ...config,
   };
-  return (error: Error, _req: Request, res: Response) => {
-    const stackTraceFrames = config.outputStackTrace ? undefined : formatStackFrames(error.stack);
+  return (error: Error, _req: Request, res: Response, _next: NextFunction) => {
+    const stackTraceFrames = config.outputStackTrace ? formatStackFrames(error.stack) : undefined;
     const name = error.constructor.name;
-    const stackTrace = `${stackTraceFrames.join('<br />').replace(/\s{2,}/g, '')}`;
+    const stackTrace = stackTraceFrames == null || stackTraceFrames.length === 0 ? undefined : `${stackTraceFrames.join('<br />').replace(/\s{2,}/g, '')}`;
     const message = error.message;
     const { type = null, title: _2 = null, message: _3 = null, stackTrace: _4 = null, ...infoData } = error['toJSON']();
     const info = JSON.stringify(infoData);
