@@ -20,4 +20,8 @@ export namespace HttpMethods {
     }
   }
 
+  export function toString(method: HttpMethods): string {
+    return HttpMethods[method].toLowerCase();
+  }
+
 }
