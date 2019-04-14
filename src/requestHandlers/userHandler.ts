@@ -4,7 +4,7 @@ import { PromiseMaybe } from 'anux-common';
 export function userHandler<T extends {}>(getUser: (req: Request) => PromiseMaybe<T>) {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const user = await getUser(req);
-    if (!user) { next(); }
+    if (!user) { next(); return; }
     req['user'] = user;
     next();
   };
