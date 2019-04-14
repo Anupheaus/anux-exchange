@@ -16,7 +16,7 @@ describe('Route Decorator', () => {
     }
     const testController = new TestController();
     const routes = getRoutesFor(testController);
-    expect(routes).to.be.an('array').of.length(1);
+    expect(routes).to.be.an('array').with.lengthOf(1);
   });
 
   it('gets the correct parameter names and method name', () => {
@@ -59,7 +59,7 @@ describe('Route Decorator', () => {
     }
     const testController = new TestController();
     const routes = getRoutesFor(testController);
-    expect(routes).to.be.an('array').with.length(2);
+    expect(routes).to.be.an('array').with.lengthOf(2);
     const [route1, route2] = routes;
     expect(route1.handler('hey')).to.eql('hey');
     expect(route2.handler()).to.eql('other');
@@ -79,7 +79,7 @@ describe('Route Decorator', () => {
     }
     const testDerivedController = new TestDerivedController();
     const routes = getRoutesFor(testDerivedController);
-    expect(routes).to.be.an('array').with.length(1);
+    expect(routes).to.be.an('array').with.lengthOf(1);
     const routeData = routes[0];
     expect(routeData.handler('hey')).to.eql('overridden');
   });
