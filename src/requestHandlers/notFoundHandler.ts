@@ -1,8 +1,9 @@
 import { NotFoundError } from '../errors';
-import { Request } from 'express';
+import { Request, NextFunction, Response } from 'express';
 
 export function notFoundHandler() {
-  return (req: Request) => {
-    throw new NotFoundError('No valid route was found for this request.', { method: req.method, path: req.path });
+  return (error: Error, request: Request, _res: Response, next: NextFunction) => {
+    if (error) { next(error); }
+    throw new NotFoundError('No valid route was found for this request.', { method: request.method, path: request.path });
   };
 }
