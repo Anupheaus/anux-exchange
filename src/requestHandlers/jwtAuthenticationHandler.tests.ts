@@ -1,6 +1,7 @@
 import chaiHttp from 'chai-http';
 import express from 'express';
 import * as jwt from 'jsonwebtoken';
+import '../models';
 import { jwtAuthenticationHandler } from './jwtAuthenticationHandler';
 
 chai.use(chaiHttp);
