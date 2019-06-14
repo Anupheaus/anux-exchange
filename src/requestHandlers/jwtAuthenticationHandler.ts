@@ -33,12 +33,16 @@ export function jwtAuthenticationHandler<TUser extends IMap>({ secret, applicati
     let userIsValid = !!user;
     user = user || emptyUser();
 
+    const createAuthenticationToken = (): string => {
+      return userIsValid ? jwt.sign({ user }, secretAsString, { issuer: applicationName, subject: jwtSubject, expiresIn: timeToLive }) : undefined;
+    };
+
     const setUserOnResponse = (newUser: TUser) => {
       try {
         if (res.headersSent) { throw new Error('Cannot set the user here, the headers for this request have already been sent.'); }
         user = newUser;
         if (userIsValid) {
-          authorizationToken = jwt.sign({ user }, secretAsString, { issuer: applicationName, subject: jwtSubject, expiresIn: timeToLive });
+          authorizationToken = createAuthenticationToken();
           res.set('authorization', `Bearer ${authorizationToken}`);
         } else {
           res.removeHeader('authorization');
@@ -50,10 +54,17 @@ export function jwtAuthenticationHandler<TUser extends IMap>({ secret, applicati
 
     if (userIsValid) { setUserOnResponse(user); } // if the user is already valid, set the user on the response
 
-    Object.defineProperty(req, 'user', {
-      get: () => user,
-      enumerable: true,
-      configurable: true,
+    Object.defineProperties(req, {
+      user: {
+        get: () => user,
+        enumerable: true,
+        configurable: true,
+      },
+      getAuthenticationToken: {
+        value: () => createAuthenticationToken(),
+        enumerable: true,
+        configurable: true,
+      },
     });
 
     req.setUser = (newUser: TUser) => { userIsValid = !!newUser; setUserOnResponse(newUser); };

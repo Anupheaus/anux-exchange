@@ -7,6 +7,7 @@ declare global {
       readonly user: IMap;
       setUser(user: IMap): void;
       clearUser(): void;
+      getAuthenticationToken(): string;
     }
   }
 }
