@@ -1,4 +1,4 @@
-import * as session from 'express-session';
+import session from 'express-session';
 
 interface IConfig {
   secretKey: string;
