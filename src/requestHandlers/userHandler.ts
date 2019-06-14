@@ -5,7 +5,7 @@ export function userHandler<T extends {}>(getUser: (req: Request) => PromiseMayb
   return async (req: Request, _res: Response, next: NextFunction) => {
     const user = await getUser(req);
     if (!user) { next(); return; }
-    req['user'] = user;
+    req.setUser(user);
     next();
   };
 }

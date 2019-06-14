@@ -229,7 +229,7 @@ export abstract class Router {
 
   private authenticate(route: IRoute, req: Request, res: Response): boolean {
     if (!route.options.isSecure) { return true; }
-    if (!req['user']) {
+    if (!req.user) {
       if (this._config.onAuthenticationRequired) {
         this._config.onAuthenticationRequired(res, req, route);
         return false;
