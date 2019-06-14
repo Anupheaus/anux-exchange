@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
-import { IMap, is } from 'anux-common';
+import { IMap, is, PromiseMaybe } from 'anux-common';
 import * as jwt from 'jsonwebtoken';
 
 interface IConfig<TUser extends IMap> {
@@ -7,7 +7,7 @@ interface IConfig<TUser extends IMap> {
   applicationName: string;
   timeToLive?: number;
   emptyUser(): TUser;
-  validate?(user: TUser): TUser;
+  validate?(user: TUser): PromiseMaybe<TUser>;
   onError?(error: Error): void;
 }
 
@@ -26,7 +26,7 @@ export function jwtAuthenticationHandler<TUser extends IMap>({ secret, applicati
         const data = jwt.verify(authorizationToken, secretAsString, { issuer: applicationName, subject: jwtSubject }) as IMap;
         if (data && data.user) {
           user = data.user;
-          if (validate) { user = validate(user); }
+          if (validate) { user = await validate(user); }
         }
       } catch (error) { /* do nothing */ }
     }
